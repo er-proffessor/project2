@@ -10,13 +10,12 @@ console.log(req_path);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use(express.static(__dirname + 'public'));
 
 // console.log(__dirname);
 
-// app.get('/', (req, res) => {
-//   res.json({ "message": "Hello World. This start testing here" })
-// })
+app.get('/', (req, res) => {
+  res.json({ "message": "Hello World. This start testing here" })
+})
 
 app.get('/home', (req, resp) => {
 
