@@ -1,0 +1,94 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.dashboard {
+    margin-left: 5px;
+    display: flex;
+    min-height: 100vh;
+
+
+}
+
+.header {
+    background-color: #3f51b5;
+    color: #fff;
+    width: 100%;
+    position: absolute;
+    left: 5px;
+    height: 80px;
+    text-align: center;
+}
+
+.sidebar {
+    background: #f0f0f0;
+    min-width: 200px;
+    margin-top: 6%;
+    padding: 20px;
+    border: 1px solid black;
+
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: blueviolet;
+}
+
+.main-content {
+    padding: 40px;
+    border: 1px solid black;
+    width: 100%;
+    display: flex;
+}
+
+.login {
+    border: 1px solid black;
+    max-width: 250px;
+    position: absolute;
+    margin-left: 80%;
+    margin-top: -4%;
+    text-decoration-color: #f0f0f0;
+    background-color: #f0f0f0;
+}
+
+.wallet_menu {
+    display: block;
+}
+
+.records {
+    height: 100px;
+    width: 200px;
+    margin-top: 5%;
+
+}
+
+.records tr {
+    padding: 5px;
+
+}
+
+.records td {
+    padding: 2px;
+    word-wrap: break-word;
+}
+
+.services {
+    margin-top: 5%;
+    padding: 20px;
+
+}
