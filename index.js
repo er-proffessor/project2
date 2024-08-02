@@ -23,6 +23,12 @@ app.get('/home', (req, resp) => {
 
 });
 
+app.get('/usermgmt', (req, resp) => {
+
+  resp.sendFile(path.join(__dirname, 'public', 'user_management.html'));
+
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
