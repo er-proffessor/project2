@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 const path = require('path');
+const users = require('./mongodb');
+
 
 // console.log(__dirname);
 
@@ -28,6 +30,17 @@ app.get('/usermgmt', (req, resp) => {
   resp.sendFile(path.join(__dirname, 'public', 'user_management.html'));
 
 });
+
+app.get("/record", async (req, resp) => {
+
+  let data = await users();
+
+  let result = await data.find().toArray();
+
+  resp.json(result);
+
+});
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
