@@ -3,7 +3,9 @@ const app = express()
 const port = 3000
 const path = require('path');
 const users = require('./mongodb');
+const { injectSpeedInsights } = require('@vercel/speed-insights');
 
+injectSpeedInsights();
 
 // console.log(__dirname);
 
