@@ -2,7 +2,9 @@ const express = require('express')
 const app = express()
 const port = 3000
 const path = require('path');
-const users = require('./mongodb');
+const users = require('./mongodb').dbConnect1;
+const category = require('./mongodb').dbConnect2;
+
 // const { injectSpeedInsights } = require('@vercel/speed-insights');
 
 // injectSpeedInsights();
@@ -43,6 +45,15 @@ app.get("/record", async (req, resp) => {
 
 });
 
+app.get("/Category-record", async (req, resp) => {
+
+  let data = await category();
+
+  let result = await data.find().toArray();
+
+  resp.json(result);
+
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
