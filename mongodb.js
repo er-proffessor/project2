@@ -13,9 +13,17 @@ const url = 'mongodb+srv://piyushshrivastava456:Piyush-9785@needit-project.jp2vn
 //   }
 // });
 
+const options = {
+    
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 10000, // Increased timeout to 10 seconds
+    socketTimeoutMS: 45000, // Optional: Set socket timeout (default is 360000)
+    connectTimeoutMS: 30000, // Optional: Set connection timeout (default is 30000)
+    family: 4 // Optional: Use IPv4, skip trying IPv6
+  };
 
-
-const client = new MongoClient(url);
+const client = new MongoClient(url, options);
 const databaseName = 'Needit_App';
 
 async function dbConnect1(){
