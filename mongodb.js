@@ -17,9 +17,9 @@ const options = {
     
     // useNewUrlParser: true,
     // useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 10000, // Increased timeout to 10 seconds
+    serverSelectionTimeoutMS: 30000, // Increased timeout to 10 seconds
     socketTimeoutMS: 45000, // Optional: Set socket timeout (default is 360000)
-    connectTimeoutMS: 30000, // Optional: Set connection timeout (default is 30000)
+    connectTimeoutMS: 50000, // Optional: Set connection timeout (default is 30000)
     family: 4 // Optional: Use IPv4, skip trying IPv6
   };
 
