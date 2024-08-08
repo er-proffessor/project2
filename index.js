@@ -55,6 +55,21 @@ app.get("/Category-record", async (req, resp) => {
 
 });
 
+app.post("/user-registration", async (req, resp) => {
+
+  const formData = req.body;
+  console.log(formData);
+
+  let data = await users();
+  let result = await data.insertOne(formData);
+  var msg = {status:"User Profile Updated Successfully"};
+  
+  resp.json(msg);
+  
+  console.log(result);
+
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
