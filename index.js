@@ -16,6 +16,8 @@ console.log(req_path);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // console.log(__dirname);
 
@@ -58,14 +60,16 @@ app.get("/Category-record", async (req, resp) => {
 app.post("/user-registration", async (req, resp) => {
 
   const formData = req.body;
+
   console.log(formData);
 
+  
   let data = await users();
   let result = await data.insertOne(formData);
   var msg = {status:"User Profile Updated Successfully"};
-  
+
   resp.json(msg);
-  
+
   console.log(result);
 
 });
