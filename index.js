@@ -4,6 +4,7 @@ const port = 3000
 const path = require('path');
 const users = require('./mongodb').dbConnect1;
 const category = require('./mongodb').dbConnect2;
+const {ObjectId} = require('mongodb');
 
 // const { injectSpeedInsights } = require('@vercel/speed-insights');
 
@@ -91,17 +92,34 @@ app.post("/get_profile", async (req, resp) => {
 
 app.post("/srch-skilled-rec", async (req, resp) => {
         const srchSkill = req.body.skills_id;
-        console.log(srchSkill);
 
-        let data = await users();
+        let data = await category();
         
-        let result =await data.find({skills_id: new RegExp(`(^|,\\s*)${srchSkill}(\\s*,|$)`)}).toArray();
+        const objectId = ObjectId.isValid(srchSkill) ? new ObjectId(srchSkill) : null;
 
-        console.log(result);
+        let result = await data.find({"_id": objectId}).toArray();
+
+
         resp.json(result);
 
   });
 
+  app.post("/update-rec", async (req, resp) => {
+ 
+    const keys = Object.keys(req.body);
+    
+    const srchId = req.body[keys[0]];
+    console.log(srchId);
+
+    const objectId = ObjectId.isValid(srchId) ? new ObjectId(srchId) : null;
+
+    let data = await users();
+
+    let result = await data.updateOne({"_id": objectId} , { $set: { [keys[1]]: req.body[keys[1]]}});
+
+   resp.json("User details updated");
+ 
+  });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
