@@ -4,7 +4,7 @@ const port = 3000
 const path = require('path');
 const users = require('./mongodb').dbConnect1;
 const category = require('./mongodb').dbConnect2;
-const {ObjectId} = require('mongodb');
+const { ObjectId } = require('mongodb');
 
 // const { injectSpeedInsights } = require('@vercel/speed-insights');
 
@@ -64,10 +64,10 @@ app.post("/user-registration", async (req, resp) => {
 
   console.log(formData);
 
-  
+
   let data = await users();
   let result = await data.insertOne(formData);
-  var msg = {status:"User Profile Updated Successfully"};
+  var msg = { status: "Succes: Welcome to Needit App" };
 
   resp.json(msg);
 
@@ -77,49 +77,64 @@ app.post("/user-registration", async (req, resp) => {
 
 app.post("/get_profile", async (req, resp) => {
 
-    console.log("test api");
-    const req_id = req.body.mob_no;
-    console.log(req_id);
+  console.log("test api");
+  const req_id = req.body.mob_no;
+  console.log(req_id);
 
-    
-    let data = await users();
-    const result = await data.find({mob_no: req_id}).toArray();
-    console.log(result);
 
-    resp.json(result);
+  let data = await users();
+  const result = await data.find({ mob_no: req_id }).toArray();
+  console.log(result);
+
+  resp.json(result);
 
 });
 
 app.post("/srch-skilled-rec", async (req, resp) => {
-        const srchSkill = req.body.skills_id;
+  
+  const srchSkill = req.body.skills_id;
+  const pincode = req.body.pincode;
+  
+  let data = await users();
 
-        let data = await category();
-        
-        const objectId = ObjectId.isValid(srchSkill) ? new ObjectId(srchSkill) : null;
+  let result = await data.find({ $and: [ {"skills_id": srchSkill }, {"pincode": pincode} ]}).toArray();
 
-        let result = await data.find({"_id": objectId}).toArray();
+  resp.json(result);
 
+});
 
-        resp.json(result);
+app.post("/update-rec", async (req, resp) => {
 
-  });
+  const keys = Object.keys(req.body);
 
-  app.post("/update-rec", async (req, resp) => {
- 
-    const keys = Object.keys(req.body);
-    
-    const srchId = req.body[keys[0]];
-    console.log(srchId);
+  const srchId = req.body[keys[0]];
+  console.log(srchId);
 
-    const objectId = ObjectId.isValid(srchId) ? new ObjectId(srchId) : null;
+  const objectId = ObjectId.isValid(srchId) ? new ObjectId(srchId) : null;
 
-    let data = await users();
+  let data = await users();
 
-    let result = await data.updateOne({"_id": objectId} , { $set: { [keys[1]]: req.body[keys[1]]}});
+  let result = await data.updateOne({ "_id": objectId },
+    {
+      $set:
+      {
+        [keys[1]]: req.body[keys[1]],
+        [keys[2]]: req.body[keys[2]],
+        [keys[3]]: req.body[keys[3]],
+        [keys[4]]: req.body[keys[4]],
+        [keys[5]]: req.body[keys[5]],
+        [keys[6]]: req.body[keys[6]],
+        [keys[7]]: req.body[keys[7]],
+        [keys[8]]: req.body[keys[8]],
+        [keys[9]]: req.body[keys[9]],
+        [keys[10]]: req.body[keys[10]],
+      }
+    });
 
-   resp.json("User details updated");
- 
-  });
+  resp.json("User details updated");
+
+});
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
