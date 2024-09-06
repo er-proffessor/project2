@@ -20,7 +20,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// console.log(__dirname);
 
 app.get('/', (req, res) => {
   res.json({ "message": "Hello World. This start testing here" })
@@ -48,6 +47,23 @@ app.get("/record", async (req, resp) => {
 
 });
 
+app.get("/limited_record", async (req, resp) => {
+
+  let data = await users();
+
+  let arr = await data.find().toArray();
+ 
+  let result = [];
+  for(let i=0; i<20; i++){
+
+    result.push(arr[i]);
+  
+  }
+
+  resp.json(result);
+
+});
+
 app.get("/Category-record", async (req, resp) => {
 
   let data = await category();
@@ -62,25 +78,16 @@ app.post("/user-registration", async (req, resp) => {
 
   const formData = req.body;
 
-  console.log(formData);
-
-
   let data = await users();
   let result = await data.insertOne(formData);
   var msg = { status: "Succes: Welcome to Needit App" };
 
   resp.json(msg);
-
-  console.log(result);
-
 });
 
 app.post("/get_profile", async (req, resp) => {
 
-  console.log("test api");
   const req_id = req.body.mob_no;
-  console.log(req_id);
-
 
   let data = await users();
   const result = await data.find({ mob_no: req_id }).toArray();
@@ -91,47 +98,59 @@ app.post("/get_profile", async (req, resp) => {
 });
 
 app.post("/srch-skilled-rec", async (req, resp) => {
-  
+
   const srchSkill = req.body.skills_id;
-  const pincode = req.body.pincode;
-  
+  const pincode_val = req.body.pincode;
+
   let data = await users();
 
-  let result = await data.find({ $and: [ {"skills_id": srchSkill }, {"pincode": pincode} ]}).toArray();
+  if (!pincode_val) {
 
-  resp.json(result);
+    let result = await data.find(req.body).toArray();
+    resp.json(result);
+
+  }
+  else {
+    
+    let arr = await data.find({ "skills_id": srchSkill }).toArray();
+
+    const keys = Object.keys(arr);
+  
+    for (let i = 0; i < arr.length - 1; i++) {
+      for (let j = i + 1; j < arr.length; j++) {
+        if (arr[keys[i]].pincode != pincode_val) {
+
+          let temp = arr[keys[i]];
+          arr[keys[i]] = arr[keys[j]];
+          arr[keys[j]] = temp;
+        }
+      }
+    }
+      resp.json(arr);
+
+  }
+});
+
+app.post("/update_recrod", async (req, resp) => {
+
+    const { filter , updates } = req.body;
+
+    const objectId2 = new ObjectId(filter._id);
+
+    let data = await users();
+
+    let result = await data.updateOne( {"_id": objectId2 }, { $set: updates });
+
+    resp.json(result);
 
 });
 
-app.post("/update-rec", async (req, resp) => {
 
-  const keys = Object.keys(req.body);
+app.post("/version_control", async (req, resp) => {
 
-  const srchId = req.body[keys[0]];
-  console.log(srchId);
+    const req_body = req.body;
 
-  const objectId = ObjectId.isValid(srchId) ? new ObjectId(srchId) : null;
-
-  let data = await users();
-
-  let result = await data.updateOne({ "_id": objectId },
-    {
-      $set:
-      {
-        [keys[1]]: req.body[keys[1]],
-        [keys[2]]: req.body[keys[2]],
-        [keys[3]]: req.body[keys[3]],
-        [keys[4]]: req.body[keys[4]],
-        [keys[5]]: req.body[keys[5]],
-        [keys[6]]: req.body[keys[6]],
-        [keys[7]]: req.body[keys[7]],
-        [keys[8]]: req.body[keys[8]],
-        [keys[9]]: req.body[keys[9]],
-        [keys[10]]: req.body[keys[10]],
-      }
-    });
-
-  resp.json("User details updated");
+    resp.json("Version Update Successfully");
 
 });
 
