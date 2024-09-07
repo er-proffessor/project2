@@ -93,6 +93,7 @@ app.post("/get_profile", async (req, resp) => {
   const result = await data.find({ mob_no: req_id }).toArray();
   console.log(result);
 
+
   resp.json(result);
 
 });
@@ -131,7 +132,7 @@ app.post("/srch-skilled-rec", async (req, resp) => {
   }
 });
 
-app.post("/update_recrod", async (req, resp) => {
+app.post("/update_record", async (req, resp) => {
 
     const { filter , updates } = req.body;
 
@@ -146,11 +147,13 @@ app.post("/update_recrod", async (req, resp) => {
 });
 
 
-app.post("/version_control", async (req, resp) => {
+app.get("/version_control", async (req, resp) => {
 
-    const req_body = req.body;
-
-    resp.json("Version Update Successfully");
+    const result = {"version" : "1",
+                    "mandatory" : false
+                  };
+    
+    resp.json(result);
 
 });
 
