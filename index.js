@@ -77,12 +77,28 @@ app.get("/Category-record", async (req, resp) => {
 app.post("/user-registration", async (req, resp) => {
 
   const formData = req.body;
+  console.log(formData.mob_no);
+  console.log(formData.referenced_user);
+
 
   let data = await users();
-  let result = await data.insertOne(formData);
-  var msg = { status: "Succes: Welcome to Needit App" };
+  let check_user = await data.find({mob_no: formData.mob_no}).toArray();
+ 
+   console.log(check_user);
 
-  resp.json(msg);
+  if(check_user.length>0)
+  {
+    console.log("Already User");
+    resp.json("Already Existing User in record");
+  }
+  else{
+        console.log("New User");
+        let result = await data.insertOne(formData);
+        let result2 = await data.updateOne( {mob_no: formData.referenced_user}, { $inc:{total_count: 1 }});
+        var msg = { status: "Succes: Welcome to Needit App" };
+        resp.json(msg);
+  }
+
 });
 
 app.post("/get_profile", async (req, resp) => {
