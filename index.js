@@ -140,7 +140,7 @@ app.post("/srch-skilled-rec", async (req, resp) => {
   const pincode_val = req.body.pincode;
 
   if (!pincode_val) {
-    let result = await data.find({ $and: [srchData, filter] }).toArray();
+    let result = await data.find(srchData).toArray();
 
     console.log("Query result:", result);
       resp.json(result);
