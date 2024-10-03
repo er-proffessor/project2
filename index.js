@@ -68,7 +68,7 @@ app.get("/limited_record", async (req, resp) => {
     }
 
   }
-  
+
   resp.json(result);
 
 });
@@ -124,6 +124,12 @@ app.post("/get_profile", async (req, resp) => {
 
 app.post("/srch-skilled-rec", async (req, resp) => {
 
+  const filter = {
+    "registered": true,
+    "serv_provider": true,
+    "is_active": "Y"
+  };
+
   const srchSkill = req.body.skills_id;
   const pincode_val = req.body.pincode;
 
@@ -131,13 +137,13 @@ app.post("/srch-skilled-rec", async (req, resp) => {
 
   if (!pincode_val) {
 
-    let result = await data.find(req.body).toArray();
+    let result = await data.find({ $and: [req.body, filter] }).toArray();
     resp.json(result);
 
   }
   else {
 
-    let arr = await data.find({ "skills_id": srchSkill }).toArray();
+    let arr = await data.find({ $and: [req.body, filter] }).toArray();
 
     const keys = Object.keys(arr);
 
