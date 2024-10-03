@@ -6,12 +6,6 @@ const users = require('./mongodb').dbConnect1;
 const category = require('./mongodb').dbConnect2;
 const { ObjectId } = require('mongodb');
 
-// const { injectSpeedInsights } = require('@vercel/speed-insights');
-
-// injectSpeedInsights();
-
-// console.log(__dirname);
-
 const req_path = path.join(__dirname + '/public');
 console.log(req_path);
 
@@ -39,9 +33,15 @@ app.get('/usermgmt', (req, resp) => {
 
 app.get("/record", async (req, resp) => {
 
+  const filter = {
+    "registered": true,
+    "serv_provider": true,
+    "is_active": "Y"
+  };
+
   let data = await users();
 
-  let result = await data.find().toArray();
+  let result = await data.find(filter).toArray();
 
   resp.json(result);
 
@@ -49,17 +49,26 @@ app.get("/record", async (req, resp) => {
 
 app.get("/limited_record", async (req, resp) => {
 
+  const filter = {
+    "registered": true,
+    "serv_provider": true,
+    "is_active": "Y"
+  };
+
   let data = await users();
 
-  let arr = await data.find().toArray();
- 
+  let arr = await data.find(filter).toArray();
+
   let result = [];
-  for(let i=0; i<20; i++){
+  for (let i = 0; i < 20; i++) {
 
-    result.push(arr[i]);
-  
+    if (arr[i]) {
+
+      result.push(arr[i]);
+    }
+
   }
-
+  
   resp.json(result);
 
 });
@@ -82,21 +91,20 @@ app.post("/user-registration", async (req, resp) => {
 
 
   let data = await users();
-  let check_user = await data.find({mob_no: formData.mob_no}).toArray();
- 
-   console.log(check_user);
+  let check_user = await data.find({ mob_no: formData.mob_no }).toArray();
 
-  if(check_user.length>0)
-  {
+  console.log(check_user);
+
+  if (check_user.length > 0) {
     console.log("Already User");
     resp.json("Already Existing User in record");
   }
-  else{
-        console.log("New User");
-        let result = await data.insertOne(formData);
-        let result2 = await data.updateOne( {mob_no: formData.referenced_user}, { $inc:{total_count: 1 }});
-        var msg = { status: "Succes: Welcome to Needit App" };
-        resp.json(msg);
+  else {
+    console.log("New User");
+    let result = await data.insertOne(formData);
+    let result2 = await data.updateOne({ mob_no: formData.referenced_user }, { $inc: { total_count: 50 } });
+    var msg = { status: "Succes: Welcome to Needit App" };
+    resp.json(msg);
   }
 
 });
@@ -128,11 +136,11 @@ app.post("/srch-skilled-rec", async (req, resp) => {
 
   }
   else {
-    
+
     let arr = await data.find({ "skills_id": srchSkill }).toArray();
 
     const keys = Object.keys(arr);
-  
+
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = i + 1; j < arr.length; j++) {
         if (arr[keys[i]].pincode != pincode_val) {
@@ -143,33 +151,34 @@ app.post("/srch-skilled-rec", async (req, resp) => {
         }
       }
     }
-      resp.json(arr);
+    resp.json(arr);
 
   }
 });
 
 app.post("/update_record", async (req, resp) => {
 
-    const { filter , updates } = req.body;
+  const { filter, updates } = req.body;
 
-    const objectId2 = new ObjectId(filter._id);
+  const objectId2 = new ObjectId(filter._id);
 
-    let data = await users();
+  let data = await users();
 
-    let result = await data.updateOne( {"_id": objectId2 }, { $set: updates });
+  let result = await data.updateOne({ "_id": objectId2 }, { $set: updates });
 
-    resp.json(result);
+  resp.json(result);
 
 });
 
 
 app.get("/version_control", async (req, resp) => {
 
-    const result = {"version" : "1",
-                    "mandatory" : false
-                  };
-    
-    resp.json(result);
+  const result = {
+    "version": "1",
+    "mandatory": false
+  };
+
+  resp.json(result);
 
 });
 
