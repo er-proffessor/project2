@@ -129,21 +129,23 @@ app.post("/srch-skilled-rec", async (req, resp) => {
     "serv_provider": true,
     "is_active": "Y"
   };
+   const srchData = req.body;
 
-  const srchSkill = req.body.skills_id;
-  const srchData = req.body;
-  console.log(srchData);
-
+  console.log("srchData:", srchData);
+  console.log("filter:", filter);
+   
+  
+  let data = await users();
+  
   const pincode_val = req.body.pincode;
 
-  let data = await users();
-
   if (!pincode_val) {
-
     let result = await data.find({ $and: [srchData, filter] }).toArray();
-    resp.json(result);
 
-  }
+    console.log("Query result:", result);
+      resp.json(result);
+    
+   }
   else {
 
     let arr = await data.find({ $and: [srchData, filter] }).toArray();
