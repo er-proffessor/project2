@@ -148,7 +148,7 @@ app.post("/srch-skilled-rec", async (req, resp) => {
    }
   else {
 
-    let arr = await data.find({ $and: [srchData, filter] }).toArray();
+    let arr = await data.find(srchData).toArray();
 
     const keys = Object.keys(arr);
 
