@@ -129,7 +129,7 @@ app.post("/srch-skilled-rec", async (req, resp) => {
     "serv_provider": true,
     "is_active": "Y"
   };
-  const srchData = req.body;
+  const srchData = req.body.skills_id;
 
   console.log("srchData:", srchData);
   console.log("filter:", filter);
