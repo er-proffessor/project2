@@ -102,12 +102,27 @@ app.post("/user-registration", async (req, resp) => {
   else {
     console.log("New User");
     let result = await data.insertOne(formData);
-    let result2 = await data.updateOne({ mob_no: formData.referenced_user }, { $inc: { total_count: 50 } });
     var msg = { status: "Succes: Welcome to Needit App" };
     resp.json(msg);
   }
 
 });
+
+app.post("/count_update", async (req, resp) => {
+
+  const formData = req.body;
+
+  let data = await users();
+
+  let result1 = await data.updateOne({ mob_no: formData.mob_no }, { $set: { registered: formData.registered, is_active: "Y" } });
+
+  let result2 = await data.updateOne({ mob_no: formData.referenced_user }, { $inc: { total_count: 50 } });
+
+  let msg = { status: "User registered successfully"};
+  
+  resp.json(msg);
+});
+
 
 app.post("/get_profile", async (req, resp) => {
 
