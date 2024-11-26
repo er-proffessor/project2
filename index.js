@@ -4,6 +4,8 @@ const port = 3000
 const path = require('path');
 const users = require('./mongodb').dbConnect1;
 const category = require('./mongodb').dbConnect2;
+const payment = require('./mongodb').dbConnect3;
+
 const { ObjectId } = require('mongodb');
 
 const req_path = path.join(__dirname + '/public');
@@ -118,8 +120,8 @@ app.post("/count_update", async (req, resp) => {
 
   let result2 = await data.updateOne({ mob_no: formData.referenced_user }, { $inc: { total_count: 50 } });
 
-  let msg = { status: "User registered successfully"};
-  
+  let msg = { status: "User registered successfully" };
+
   resp.json(msg);
 });
 
@@ -212,7 +214,31 @@ app.get("/version_control", async (req, resp) => {
 
 });
 
+app.post("/payment_req", async (req, resp) => {
+
+  let data = await users();
+  let amount = await payment();
+
+  const form_data = req.body;
+
+  let check_user = await data.find({ mob_no: form_data.mob_no }).toArray();
+
+  if (form_data.amount >= check_user[0].total_count) {
+    resp.json("Requested amount can't be withdraw more than your total earnings");
+  }
+  else {
+    const result = await amount.insertOne(form_data);
+
+    const wallet_amount = check_user[0].total_count - form_data.amount;
+    const result1 = await data.updateOne({ mob_no: form_data.mob_no }, { $set: { total_count: wallet_amount } });
+
+    var msg = { status: "Succes: Payment request received" };
+    resp.json(msg);
+
+  }
+});
+
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Needit app listening on port ${port}`)
 })
