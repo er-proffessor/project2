@@ -224,7 +224,7 @@ app.post("/payment_req", async (req, resp) => {
   let check_user = await data.find({ mob_no: form_data.mob_no }).toArray();
 
   if (form_data.amount >= check_user[0].total_count) {
-    resp.json("Requested amount can't be withdraw more than your total earnings");
+    resp.json( { status: "Requested amount can't be withdraw more than your total earnings" } );
   }
   else {
     const result = await amount.insertOne(form_data);
