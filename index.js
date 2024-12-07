@@ -220,13 +220,19 @@ app.post("/payment_req", async (req, resp) => {
   let amount = await payment();
 
   const form_data = req.body;
+  const req_amt = req.body.amount;
+  console.log(req_amt);
+
 
   let check_user = await data.find({ mob_no: form_data.mob_no }).toArray();
 
-  if (form_data.amount >= check_user[0].total_count) {
-    resp.json( { status: "Requested amount can't be withdraw more than your total earnings" } );
+  const user_wallet = check_user[0].total_count;
+  console.log(user_wallet);
+
+  if (req_amt < 100 || req_amt >= user_wallet) {
+    resp.json( { status: "Requested amount can't be withdraw less than 100 or more than your total earnings" } );
   }
-  else {
+  else { 
     const result = await amount.insertOne(form_data);
 
     const wallet_amount = check_user[0].total_count - form_data.amount;
