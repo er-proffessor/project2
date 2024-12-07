@@ -207,7 +207,7 @@ app.get("/version_control", async (req, resp) => {
 
   const result = {
     "version": "2",
-    "mandatory": false
+    "mandatory": true
   };
 
   resp.json(result);
