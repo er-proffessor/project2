@@ -206,7 +206,7 @@ app.post("/update_record", async (req, resp) => {
 app.get("/version_control", async (req, resp) => {
 
   const result = {
-    "version": "1",
+    "version": "2",
     "mandatory": false
   };
 
