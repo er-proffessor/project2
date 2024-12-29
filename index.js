@@ -5,6 +5,7 @@ const path = require('path');
 const users = require('./mongodb').dbConnect1;
 const category = require('./mongodb').dbConnect2;
 const payment = require('./mongodb').dbConnect3;
+const emitra_serv = require('./mongodb').dbConnect4;
 
 const { ObjectId } = require('mongodb');
 
@@ -221,14 +222,11 @@ app.post("/payment_req", async (req, resp) => {
 
   const form_data = req.body;
   const req_amt = req.body.amount;
-  console.log(req_amt);
-
-
+  
   let check_user = await data.find({ mob_no: form_data.mob_no }).toArray();
 
   const user_wallet = check_user[0].total_count;
-  console.log(user_wallet);
-
+  
   if (req_amt < 100 || req_amt >= user_wallet) {
     resp.json( { status: "Requested amount can't be withdraw less than 100 or more than your total earnings" } );
   }
@@ -244,6 +242,16 @@ app.post("/payment_req", async (req, resp) => {
   }
 });
 
+app.get("/emitra_serv", async (req, resp) => {
+      
+      let data = await emitra_serv();
+
+      let result = await data.find().toArray();
+
+
+      resp.json(result);
+
+});
 
 app.listen(port, () => {
   console.log(`Needit app listening on port ${port}`)

@@ -28,5 +28,12 @@ async function dbConnect3(){
     return users = db.collection('Payment_req');
 }
 
-module.exports = {dbConnect1, dbConnect2, dbConnect3};
+async function dbConnect4(){
+    let result = await client.connect();
+    let db = result.db(databaseName);
+
+    return emitra_file = db.collection('emitra_serv');
+}
+
+module.exports = {dbConnect1, dbConnect2, dbConnect3, dbConnect4};
 
