@@ -89,10 +89,7 @@ app.get("/Category-record", async (req, resp) => {
 app.post("/user-registration", async (req, resp) => {
 
   const formData = req.body;
-  console.log(formData.mob_no);
-  console.log(formData.referenced_user);
-
-
+  
   let data = await users();
   let check_user = await data.find({ mob_no: formData.mob_no }).toArray();
 
@@ -151,12 +148,6 @@ app.post("/srch-skilled-rec", async (req, resp) => {
     "skills_id": req.body.skills_id
   }
 
-  console.log(srchData.skills_id);
-
-  console.log("srchData:", srchData);
-  console.log("filter:", filter);
-
-
   let data = await users();
 
   const pincode_val = req.body.pincode;
@@ -164,7 +155,6 @@ app.post("/srch-skilled-rec", async (req, resp) => {
   if (!pincode_val) {
     let result = await data.find({ $and: [srchData, filter] }).toArray();
 
-    console.log("Query result:", result);
     resp.json(result);
 
   }
@@ -207,7 +197,7 @@ app.post("/update_record", async (req, resp) => {
 app.get("/version_control", async (req, resp) => {
 
   const result = {
-    "version": "2",
+    "version": "4",
     "mandatory": true
   };
 
@@ -247,7 +237,6 @@ app.get("/emitra_serv", async (req, resp) => {
       let data = await emitra_serv();
 
       let result = await data.find().toArray();
-
 
       resp.json(result);
 
