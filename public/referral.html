@@ -1,20 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Open App</title>
+    <title>Redirecting...</title>
     <script>
-      const ref = new URLSearchParams(window.location.search).get('ref');
-      const intentLink = intent://project2-red-five.vercel.app/?ref=${ref}#Intent;scheme=https;package=com.needit.needit;end;
+      const ref = new URLSearchParams(window.location.search).get("ref") || "";
+      const appPackage = "com.needit.needit"; // <-- change to your app ID
+      const fallbackUrl = https://play.google.com/store/apps/details?id=com.needit.needit;
+      const deepLink = myapp://referral?ref=${ref}; // <-- use your custom scheme
+      const intentLink = intent://referral?ref=${ref}#Intent;scheme=myapp;package=com.needit.needit;end;
 
-      setTimeout(() => {
-        window.location.href = 'https://play.google.com/store/apps/details?id=com.needit.needit';
-      }, 2000); // fallback to Play Store after 2 seconds
+      function openApp() {
+        const now = new Date().getTime();
+        setTimeout(function () {
+          const hiddenTime = new Date().getTime() - now;
+          if (hiddenTime < 2000) {
+            window.location.href = fallbackUrl;
+          }
+        }, 1500);
 
-      window.location.href = intentLink;
+        // Try to open app using iframe
+        const iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.src = deepLink;
+        document.body.appendChild(iframe);
+      }
+
+      window.onload = openApp;
     </script>
   </head>
   <body>
-    Redirecting...
+    <p>Redirecting to app...</p>
   </body>
 </html>
