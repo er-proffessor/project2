@@ -6,9 +6,9 @@
     <script>
       const ref = new URLSearchParams(window.location.search).get("ref") || "";
       const appPackage = "com.needit.needit"; // <-- change to your app ID
-      const fallbackUrl = https://play.google.com/store/apps/details?id=com.needit.needit;
-      const deepLink = myapp://referral?ref=${ref}; // <-- use your custom scheme
-      const intentLink = intent://referral?ref=${ref}#Intent;scheme=myapp;package=com.needit.needit;end;
+      const fallbackUrl = `https://play.google.com/store/apps/details?id=com.needit.needit`;
+      const deepLink = `myapp://referral?ref=${ref}`; // <-- use your custom scheme
+      const intentLink = `intent://referral?ref=${ref}#Intent;scheme=myapp;package=com.needit.needit;end`;
 
       function openApp() {
         const now = new Date().getTime();
