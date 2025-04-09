@@ -1,0 +1,11 @@
+[
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.needit.needit",
+        "sha256_cert_fingerprints":
+          ["24:BA:26:25:DC:47:2A:58:45:1D:F9:E6:57:FF:AB:2D:9D:C2:FD:18:17:C7:58:51:66:FC:1B:0B:25:45:76:48"]
+      }
+    }
+  ]
